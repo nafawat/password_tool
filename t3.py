@@ -1,4 +1,8 @@
-import re
+def pass_gen():
+    print("PASSWORD GENERATOR --->")
+
+import random
+import string
 
 def check_password_strength(password):
     # Initialize criteria flags
@@ -26,11 +30,42 @@ def check_password_strength(password):
 
     return strength
 
-def main():
-    print("Password Complexity Checker")
-    password = input("Enter a password to check its strength: ")
-    strength = check_password_strength(password)
-    print(f"Password Strength: {strength}")
+def generate_complex_password(length=106):
+    # 1. Define character pools
+    lower = string.ascii_lowercase
+    upper = string.ascii_uppercase
+    num = string.digits
+    symbols = string.punctuation
+    
+    # 2. Guarantee at least one of each type
+    guarantee = [
+        random.choice(lower),
+        random.choice(upper),
+        random.choice(num),
+        random.choice(symbols)
+    ]
+    
+    # 3. Create a pool for the remaining characters
+    all_chars = lower + upper + num + symbols
+    
+    # 4. Generate the remaining characters
+    # We subtract 4 because we already guaranteed 4 characters
+    remaining_length = length - len(guarantee)
+    remaining_chars = random.choices(all_chars, k=remaining_length)
+    
+    # 5. Combine the guaranteed characters with the random remainder
+    password_list = guarantee + remaining_chars
+    
+    # 6. SHUFFLE the entire list to make the guaranteed characters random positions
+    random.shuffle(password_list)
+    
+    # 7. Join and return the password
+    return "".join(password_list)
 
-if __name__ == "__main__":
-    main()
+# Example usage:
+
+le = int(input("ENTER THE LENGTH THAT U WANT : "))
+complex_pass = generate_complex_password(le)
+strength_pass= check_password_strength(complex_pass)
+print(f"Generated Password: {complex_pass}")
+print(f"Password: {strength_pass}")
